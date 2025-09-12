@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Available Houses - Akiya App</title>
+    <link rel="stylesheet" href="./css/houses.css" />
+  </head>
+  <body>
+    <h1>Available Houses</h1>
+
+    <!-- Filters -->
+    <section class="filters">
+      <input type="text" id="filterLocation" placeholder="City" />
+      <input type="number" id="filterPrice" placeholder="Max Price" />
+      <input type="number" id="filterSize" placeholder="Min Size (m²)" />
+      <button id="filterBtn">Apply Filters</button>
+    </section>
+
+    <!-- House List -->
+    <ul id="houseList"></ul>
+
+    <!-- Logout -->
+    <button id="logoutBtn">Logout</button>
+
+    <script type="module" src="js/houses.js"></script>
+  </body>
+</html>

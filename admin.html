@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Admin Panel - Akiya App</title>
+    <link rel="stylesheet" href="./css/admin.css" />
+  </head>
+  <body>
+    <h1>Admin Panel</h1>
+
+    <!-- House Form -->
+    <section class="admin__houses">
+      <h2>Add / Edit House</h2>
+      <form id="houseForm">
+        <input type="text" id="title" placeholder="Title" required /><br />
+        <textarea id="description" placeholder="Description" required></textarea
+        ><br />
+        <input type="text" id="address" placeholder="Address" required /><br />
+        <input type="text" id="city" placeholder="City" required /><br />
+        <input type="number" id="lat" placeholder="Latitude" step="any" /><br />
+        <input
+          type="number"
+          id="lng"
+          placeholder="Longitude"
+          step="any"
+        /><br />
+        <input type="number" id="price" placeholder="Price" required /><br />
+        <input type="number" id="size" placeholder="Size (m²)" required /><br />
+        <input
+          type="text"
+          id="images"
+          placeholder="Image URL (comma separated)"
+        /><br />
+        <button type="submit">Save House</button>
+      </form>
+
+      <!-- Existing Houses -->
+      <h2>Existing Houses</h2>
+      <ul id="houseList"></ul>
+    </section>
+
+    <!-- Reservations Section -->
+    <section class="admin__reservations">
+      <h2>Reservations</h2>
+      <div id="reservationList"></div>
+    </section>
+
+    <!-- Logout -->
+    <button id="logoutBtn">Logout</button>
+
+    <script type="module" src="js/admin.js"></script>
+  </body>
+</html>

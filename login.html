@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Login - Akiya App</title>
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
+    <div class="Login">
+      <h1 class="login__title">Login</h1>
+
+      <form id="loginForm" class="login-form">
+        <input
+          type="email"
+          id="email"
+          placeholder="Email"
+          required
+          class="login__email"
+        /><br />
+        <input
+          type="password"
+          id="password"
+          placeholder="Password"
+          required
+          class="login__password"
+        /><br />
+        <button type="submit">Login</button>
+      </form>
+    </div>
+    <p class="signup__text">
+      Don't have an account?
+      <a href="signup.html" class="signup__Btn">Sign up</a>
+    </p>
+
+    <script type="module" src="js/auth.js"></script>
+  </body>
+</html>

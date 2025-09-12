@@ -1,0 +1,48 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // -------------------
+    // Users collection
+    // -------------------
+    match /users/{userId} {
+      // User can read/write their own profile
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+
+      // Favorites subcollection
+      match /favorites/{houseId} {
+        allow read, create, delete: if request.auth != null && request.auth.uid == userId;
+      }
+    }
+
+    // -------------------
+    // Houses collection
+    // -------------------
+   match /houses/{houseId} {
+  allow read: if true; // public can read
+  allow create, update, delete: if request.auth != null && request.auth.token.admin == true;
+}
+
+    // -------------------
+    // Reservations collection
+    // -------------------
+    match /reservations/{reservationId} {
+      // Any logged-in user can create a reservation
+      allow create: if request.auth != null;
+
+      // User can read only their own reservations
+      allow read: if request.auth != null && request.auth.uid == resource.data.userId;
+
+      // Admin can read/update/delete all reservations
+      allow read, update, delete: if request.auth != null && request.auth.token.admin == true;
+    }
+
+    // -------------------
+    // Notifications collection
+    // -------------------
+    match /notifications/{notifId} {
+      // Only the intended user can read/write their notifications
+      allow read, write: if request.auth != null && request.auth.uid == resource.data.userId;
+    }
+  }
+}

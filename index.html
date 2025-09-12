@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- GoogleFonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bree+Serif&family=Dela+Gothic+One&family=DotGothic16&family=Kaisei+Decol&family=Kaisei+Opti&family=Lora:ital,wght@0,400..700;1,400..700&family=Moirai+One&family=Permanent+Marker&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Zen+Kaku+Gothic+New:wght@300;400;500;700;900&family=Zen+Kurenaido&family=Zen+Maru+Gothic:wght@300;400;500;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <!-- css -->
+    <link rel="stylesheet" href="./css/style.min.css" />
+    <!-- reset -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/the-new-css-reset/css/reset.min.css"
+    />
+    <title>わたしの博物館</title>
+  </head>
+  <body class="top">
+    <header class="top__header header">
+      <div class="header__inner">
+        <div class="header__list">
+          <a href="#" class="header__item header__item-my">
+            <img src="./item/my_page.png" alt="マイページへ飛ぶ" />
+          </a>
+          <a href="#" class="header__item header__item-chat">
+            <img src="./item/chat.png" alt="チャットへ飛ぶ" />
+          </a>
+        </div>
+      </div>
+    </header>
+    <main class="top__main main">
+
+
+      <section class="filters">
+        <div class="filters__inner">
+          <input type="text" id="filterLocation" placeholder="City" />
+          <input type="number" id="filterPrice" placeholder="Max Price" />
+          <input type="number" id="filterSize" placeholder="Min Size (m²)" />
+          <button id="filterBtn">Filter</button>
+        </div>
+      </section>
+
+
+
+      <div class="top__pic">
+        <div class="top__inner">
+          <img src="./item/top_container.png" alt="" />
+        </div>
+      </div>
+      <section class="main__conteiner container">
+        <div class="container__inner">
+          <article class="container__card container__card-museum">
+            <div class="container__pic">
+              <img src="./item/museum_btn.png" alt="" />
+            </div>
+            <div class="container__btn">
+              <p class="container__btn-text">博物館一覧</p>
+              <img src="./item/btn.png" alt="" class="container__btn-arrow" />
+            </div>
+          </article>
+          <article class="container__card container__card-museum">
+            <div class="container__pic">
+              <img src="./item/house_btn.png" alt="" />
+            </div>
+            <div class="container__btn">
+              <p class="container__btn-text">空き家一覧</p>
+              <img src="./item/btn.png" alt="" class="container__btn-arrow" />
+            </div>
+          </article>
+        </div>
+      </section>
+      <section class="main__about about">
+        <div class="about__inner">
+          <article class="about__info">
+            <div class="about__heading">
+              <h2>about</h2>
+              <p class="about__heading about__heading-tex">
+                -わたしの博物館とは-
+              </p>
+            </div>
+            <div class="about__tex">
+              <p>空き家を「ちいさな博物館」<br />としてよみがえらせたい。</p>
+              <p>そんな思いで生まれたのが<br />『わたしの博物館』です。</p>
+              <p>
+                大切に集めたコレクションを展示したり、見に来てくれた人とおしゃべりしたり。
+              </p>
+              <p>
+                空き家が新しい出会いの場になって、人と人との輪が続いていく――。
+              </p>
+              <p>
+                そんなあたたかいつながりを育てていく場所が<br />
+                『わたしの博物館』です。
+              </p>
+            </div>
+          </article>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
