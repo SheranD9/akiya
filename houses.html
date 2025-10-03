@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>わたしの空き家 - 一覧</title>
+    <link rel="stylesheet" href="./css/houses.css" />
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
+      import {
+        getFirestore,
+        collection,
+        getDocs,
+      } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyA8WauCKutQwzK2kkBPprzwWoy7p9cAXVE",
+        authDomain: "akiya-app-e7a9b.firebaseapp.com",
+        projectId: "akiya-app-e7a9b",
+        storageBucket: "akiya-app-e7a9b.firebasestorage.app",
+        messagingSenderId: "665091929996",
+        appId: "1:665091929996:web:720cedd79b1ba1e4c748a9",
+        measurementId: "G-JV28SYR2NL",
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const db = getFirestore(app);
+
+      async function fetchHousesWithRooms() {
+        const housesSnap = await getDocs(collection(db, "houses"));
+        const houses = await Promise.all(
+          housesSnap.docs.map(async (hDoc) => {
+            const house = { id: hDoc.id, ...hDoc.data() };
+            const roomsSnap = await getDocs(
+              collection(db, "houses", hDoc.id, "rooms")
+            );
+            house.rooms = roomsSnap.docs.map((r) => ({
+              id: r.id,
+              ...r.data(),
+            }));
+            return house;
+          })
+        );
+        return houses;
+      }
+
+      function renderHouses(houses) {
+        const list = document.getElementById("house-list");
+        list.innerHTML = "";
+
+        if (houses.length === 0) {
+          list.innerHTML = "<p>該当する空き家はありません。</p>";
+          return;
+        }
+
+        houses.forEach((h) => {
+          const link = document.createElement("a");
+          link.href = `house.html?houseId=${h.id}`;
+          link.className = "house-link";
+
+          const div = document.createElement("div");
+          div.className = "house";
+
+          const addrText = h.address
+            ? [h.address.prefecture, h.address.city, h.address.detail]
+                .filter(Boolean)
+                .join("")
+            : "不明";
+
+          div.innerHTML = `
+          <img src="${h.photoUrl || "./img/noimage.png"}" alt="${
+            h.title
+          }" class="house-photo" style="width:45%;">
+          <h2>${h.title || "名称未設定の空き家"}</h2>
+          <p><strong>所在地:</strong> ${addrText}</p>
+          <ul>
+            ${h.rooms
+              .map(
+                (r) => `
+              <li class="room">
+                <h4>${r.name || "部屋名なし"}</h4>
+                <img src="${r.photoUrl || "./img/noimage-room.png"}" alt="${
+                  r.name
+                }" class="room-photo"><br>
+                料金: ${r.priceYen ? r.priceYen + "円" : "未設定"}<br>
+                面積: ${r.area ? r.area + "㎡" : "未設定"}<br>
+                階数: ${r.floor || "-"}階
+              </li>
+            `
+              )
+              .join("")}
+          </ul>
+        `;
+
+          link.appendChild(div);
+          list.appendChild(link);
+        });
+      }
+
+      function searchHouses(houses, keyword) {
+        keyword = keyword.trim().toLowerCase();
+        if (!keyword) return houses;
+
+        return houses.filter((h) => {
+          const addrText = h.address
+            ? [h.address.prefecture, h.address.city, h.address.detail]
+                .filter(Boolean)
+                .join(" ")
+            : "";
+
+          const houseMatch =
+            (h.title || "").toLowerCase().includes(keyword) ||
+            addrText.toLowerCase().includes(keyword);
+
+          const roomMatch = h.rooms.some(
+            (r) =>
+              (r.name || "").toLowerCase().includes(keyword) ||
+              (r.description || "").toLowerCase().includes(keyword) ||
+              String(r.category || "")
+                .toLowerCase()
+                .includes(keyword)
+          );
+
+          return houseMatch || roomMatch;
+        });
+      }
+
+      let allHouses = [];
+      window.addEventListener("DOMContentLoaded", async () => {
+        allHouses = await fetchHousesWithRooms();
+        renderHouses(allHouses);
+
+        const searchInput = document.getElementById("search-input");
+        const searchBtn = document.getElementById("search-btn");
+
+        searchBtn.addEventListener("click", () => {
+          const keyword = searchInput.value;
+          const filtered = searchHouses(allHouses, keyword);
+          renderHouses(filtered);
+        });
+
+        searchInput.addEventListener("keydown", (e) => {
+          if (e.key === "Enter") searchBtn.click();
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <a href="./index.html"
+      ><img src="./image/item/btn.png" alt="前のページに戻る"
+    /></a>
+    <h1>空き家一覧</h1>
+    <div class="search">
+      <input type="text" id="search-input" placeholder="キーワード検索" />
+      <button id="search-btn">検索</button>
+    </div>
+    <div id="house-list">読み込み中...</div>
+  </body>
+</html>

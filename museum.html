@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>博物館詳細</title>
+    <link rel="stylesheet" href="./css/museum.css" />
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
+      import {
+        getFirestore,
+        collection,
+        getDocs,
+        doc,
+        getDoc,
+      } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+
+      // Firebase設定
+      const firebaseConfig = {
+        apiKey: "AIzaSyA8WauCKutQwzK2kkBPprzwWoy7p9cAXVE",
+        authDomain: "akiya-app-e7a9b.firebaseapp.com",
+        projectId: "akiya-app-e7a9b",
+        storageBucket: "akiya-app-e7a9b.firebasestorage.app",
+        messagingSenderId: "665091929996",
+        appId: "1:665091929996:web:720cedd79b1ba1e4c748a9",
+        measurementId: "G-JV28SYR2NL",
+      };
+
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const db = getFirestore(app);
+
+      // URLパラメータから museumId を取得
+      const params = new URLSearchParams(window.location.search);
+      const museumId = params.get("museumId");
+
+      async function fetchMuseumDetail() {
+        const content = document.getElementById("content");
+
+        if (!museumId) {
+          content.innerHTML = "<p>博物館が見つかりません。</p>";
+          return;
+        }
+
+        // museum データ取得
+        const museumRef = doc(db, "museums", museumId);
+        const museumSnap = await getDoc(museumRef);
+
+        if (!museumSnap.exists()) {
+          content.innerHTML = "<p>この博物館は存在しません。</p>";
+          return;
+        }
+
+        const museum = museumSnap.data();
+
+        // addressオブジェクトを組み立て
+        let addressText = "不明";
+        if (museum.address) {
+          const { prefecture = "", city = "", detail = "" } = museum.address;
+          addressText = `${prefecture}${city}${detail}` || "不明";
+        }
+
+        // rooms サブコレクションを取得
+        const roomsSnap = await getDocs(
+          collection(db, "museums", museumId, "rooms")
+        );
+        const rooms = roomsSnap.docs.map((r) => ({ id: r.id, ...r.data() }));
+
+        // rooms部分のHTML
+        let roomsHTML = "";
+        if (rooms.length > 0) {
+          roomsHTML = `
+            <h2>展示状況</h2>
+            <div class="slideshow">
+              ${rooms
+                .map(
+                  (r) => `
+                  <div class="slide">
+                    <img src="${r.photo}" alt="${
+                    r.title || "展示写真"
+                  }" class="museum-photo" style="width:40%; aspect-ratio:3/4; object-fit:cover;">
+                    <h3>${r.title || "展示名なし"}</h3>
+                    <p>${r.description || "説明なし"}</p>
+                    <p>カテゴリ: ${r.category || "未設定"}</p>
+                    ${
+                      r.imageUrl
+                        ? `<img src="${r.imageUrl}" alt="${r.title}">`
+                        : ""
+                    }
+                  </div>
+                `
+                )
+                .join("")}
+            </div>`;
+        } else {
+          roomsHTML = `<h2>展示状況</h2><p>展示はまだ登録されていません。</p>`;
+        }
+
+        // HTML生成
+        content.innerHTML = `
+          <p><a href="./museums.html">← 一覧に戻る</a></p>
+          <h1>${museum.title || "名称未設定の博物館"}</h1>
+          <p><strong>住所:</strong> ${addressText}</p>
+          <p><strong>会期:</strong> ${museum.period || "未定"}</p>
+          <p><strong>入場料:</strong> ${
+            museum.priceYen ? museum.priceYen + "円" : "未設定"
+          }</p>
+
+          ${roomsHTML}
+
+        <a href="./reservation.html?museumId=${museumId}" class="btn">チケットを購入</a>
+
+          <h2>アクセス</h2>
+          ${
+            museum.mapUrl && museum.mapUrl.startsWith("http")
+              ? `<iframe src="${museum.mapUrl}" width="100%" height="300" style="border:0;" allowfullscreen></iframe>`
+              : ""
+          }
+          <p>${museum.access || "交通情報未設定"}</p>
+        `;
+      }
+
+      window.addEventListener("DOMContentLoaded", fetchMuseumDetail);
+    </script>
+  </head>
+  <body>
+    <div id="content">読み込み中...</div>
+  </body>
+</html>

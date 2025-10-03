@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>わたしの博物館 - 一覧</title>
+    <link rel="stylesheet" href="./css/museums.css" />
+    <script type="module">
+      // Firebase import
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
+      import {
+        getFirestore,
+        collection,
+        getDocs,
+      } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+
+      // Firebase config
+      const firebaseConfig = {
+        apiKey: "AIzaSyA8WauCKutQwzK2kkBPprzwWoy7p9cAXVE",
+        authDomain: "akiya-app-e7a9b.firebaseapp.com",
+        projectId: "akiya-app-e7a9b",
+        storageBucket: "akiya-app-e7a9b.firebasestorage.app",
+        messagingSenderId: "665091929996",
+        appId: "1:665091929996:web:720cedd79b1ba1e4c748a9",
+        measurementId: "G-JV28SYR2NL",
+      };
+
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const db = getFirestore(app);
+
+      // museums と rooms をまとめて取得
+      async function fetchMuseumsWithRooms() {
+        const museumsSnap = await getDocs(collection(db, "museums"));
+        const museums = await Promise.all(
+          museumsSnap.docs.map(async (hDoc) => {
+            const museum = { id: hDoc.id, ...hDoc.data() };
+
+            // rooms サブコレクションを取得
+            const roomsSnap = await getDocs(
+              collection(db, "museums", hDoc.id, "rooms")
+            );
+            museum.rooms = roomsSnap.docs.map((r) => ({
+              id: r.id,
+              ...r.data(),
+            }));
+
+            return museum;
+          })
+        );
+        return museums;
+      }
+
+      // HTML に描画
+      function renderMuseums(museums) {
+        const list = document.getElementById("museum-list");
+        list.innerHTML = "";
+
+        if (!museums.length) {
+          list.innerHTML =
+            '<p class="no-result">該当する博物館はありません。</p>';
+          return;
+        }
+
+        museums.forEach((h) => {
+          const link = document.createElement("a");
+          link.href = `museum.html?museumId=${h.id}`;
+          link.className = "museum-link";
+
+          const div = document.createElement("div");
+          div.className = "museum";
+
+          div.innerHTML = `
+  <div class="museum-header">
+    <img src="${h.mainPhotoUrl}" alt="${
+            h.title
+          }" class="museum-photo" style="width:45%;">
+    <h2>${h.title || "名称未設定の博物館"}</h2>
+  </div>
+              <p><strong>所在地:</strong> ${
+                typeof h.address === "string"
+                  ? h.address
+                  : h.address
+                  ? `${h.address.prefecture || ""} ${h.address.city || ""} ${
+                      h.address.detail || ""
+                    }`
+                  : "不明"
+              }</p>
+            <p><strong>料金:</strong> ${h.priceYen ?? "未設定"}円</p>
+            <h3>部屋の展示</h3>
+            <ul>
+              ${h.rooms
+                .map(
+                  (r) => `
+                <li class="room">
+                     <img src="${r.photo}" alt="${
+                    r.title || "展示写真"
+                  }" class="museum-photo" style="width:40%; aspect-ratio:3/4; object-fit:cover;">
+                  <strong>${r.title || "展示名なし"}</strong>
+                  （${r.floor || "-"}階）<br>
+                  ${r.description || "説明なし"}<br>
+                  カテゴリ: ${r.category || "未設定"}
+                </li>`
+                )
+                .join("")}
+            </ul>
+          `;
+
+          link.appendChild(div);
+          list.appendChild(link);
+        });
+      }
+
+      // 検索処理
+      function searchMuseums(museums, keyword) {
+        if (!keyword) return museums;
+        keyword = keyword.trim().toLowerCase();
+        if (!keyword) return museums; // 空文字・スペースだけは全件表示
+
+        return museums.filter((h) => {
+          const titleStr = h.title || "";
+          const addressStr =
+            typeof h.address === "string"
+              ? h.address
+              : h.address
+              ? `${h.address.prefecture || ""} ${h.address.city || ""} ${
+                  h.address.detail || ""
+                }`
+              : "";
+
+          const museumMatch =
+            titleStr.toLowerCase().includes(keyword) ||
+            addressStr.toLowerCase().includes(keyword);
+
+          const roomMatch = h.rooms.some((r) =>
+            [r.title || "", r.description || "", String(r.category || "")].some(
+              (field) => field.toLowerCase().includes(keyword)
+            )
+          );
+
+          return museumMatch || roomMatch;
+        });
+      }
+
+      // 起動時にデータ取得
+      let allMuseums = [];
+      window.addEventListener("DOMContentLoaded", async () => {
+        allMuseums = await fetchMuseumsWithRooms();
+        renderMuseums(allMuseums);
+
+        // 検索イベント（クリック）
+        document.getElementById("search-btn").addEventListener("click", () => {
+          const keyword = document.getElementById("search-input").value;
+          const filtered = searchMuseums(allMuseums, keyword);
+          renderMuseums(filtered);
+        });
+
+        // 検索イベント（Enterキー）
+        document
+          .getElementById("search-input")
+          .addEventListener("keyup", (e) => {
+            if (e.key === "Enter") {
+              const keyword = e.target.value;
+              const filtered = searchMuseums(allMuseums, keyword);
+              renderMuseums(filtered);
+            }
+          });
+      });
+    </script>
+  </head>
+  <body>
+    <a href="./index.html"
+      ><img src="./image/item/btn.png" alt="前のページに戻る"
+    /></a>
+    <h1>博物館一覧</h1>
+    <div class="search">
+      <input type="text" id="search-input" placeholder="キーワード検索" />
+      <button id="search-btn">検索</button>
+    </div>
+    <div id="museum-list"></div>
+  </body>
+</html>

@@ -6,9 +6,6 @@ import {
 import {
   collection,
   getDocs,
-  addDoc,
-  doc,
-  serverTimestamp,
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
 const houseList = document.getElementById("houseList");
@@ -99,30 +96,16 @@ filterBtn.addEventListener("click", () => {
 });
 
 // --------------------
-// Book house function
+// Book house function → redirect to ticket.html
 // --------------------
 window.bookHouse = function (houseId) {
-  onAuthStateChanged(auth, async (user) => {
+  onAuthStateChanged(auth, (user) => {
     if (!user) {
       alert("Please login first to book a visit.");
+      window.location.href = "login.html";
       return;
     }
-    const visitDate = prompt("Enter visit date (YYYY-MM-DD):");
-    if (!visitDate) return;
-
-    try {
-      await addDoc(collection(db, "reservations"), {
-        houseId,
-        userId: user.uid,
-        date: visitDate,
-        status: "pending",
-        createdAt: serverTimestamp(),
-      });
-      alert("Reservation created! Waiting for approval.");
-    } catch (error) {
-      console.error(error);
-      alert("Error creating reservation. Check console.");
-    }
+    window.location.href = "ticket.html?houseId=" + houseId;
   });
 };
 

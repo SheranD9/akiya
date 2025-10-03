@@ -8,7 +8,7 @@ body {
   margin-bottom: 20px;
 }
 
-.house {
+.museum {
   margin-bottom: 1rem;
   padding: 1rem;
   border: 1px solid #ccc;
@@ -17,7 +17,7 @@ body {
   transition: transform 0.2s ease;
   background-color: #f9f9f9;
 }
-.house:hover {
+.museum:hover {
   transform: translateY(-1px);
 }
 

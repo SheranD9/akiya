@@ -1,0 +1,22 @@
+<svg width="99" height="158" viewBox="0 0 99 158" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect width="173" height="158" transform="matrix(1 0 0 -1 -74 158)" fill="url(#pattern0_207_501)"/>
+<defs>
+<pattern id="pattern0_207_501" patternUnits="userSpaceOnUse" patternTransform="matrix(30 0 0 30 0 0)" preserveAspectRatio="none" viewBox="0 0 30 30" width="1" height="1">
+<g id="pattern0_207_501_inner">
+<g clip-path="url(#clip0_207_501)">
+<circle cx="15" cy="15" r="3" fill="#FFB886"/>
+<circle cx="15" cy="30" r="3" fill="#FFE18F"/>
+<circle cx="30" r="3" fill="#FFB886"/>
+<circle cx="30" cy="15" r="3" fill="#FFE18F"/>
+<circle cx="30" cy="30" r="3" fill="#FFB886"/>
+<circle cx="15" r="3" fill="#FFE18F"/>
+<circle r="3" fill="#FFB886"/>
+<circle cy="15" r="3" fill="#FFE18F"/>
+<circle cy="30" r="3" fill="#FFB886"/>
+</g>
+</g>
+</pattern><clipPath id="clip0_207_501">
+<rect width="30" height="30" fill="white"/>
+</clipPath>
+</defs>
+</svg>

@@ -1,26 +1,100 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja">
   <head>
-    <title>Available Houses - Akiya App</title>
-    <link rel="stylesheet" href="./css/houses.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>空き家詳細</title>
+    <link rel="stylesheet" href="./css/house.css" />
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
+      import {
+        getFirestore,
+        collection,
+        getDocs,
+        doc,
+        getDoc,
+      } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyA8WauCKutQwzK2kkBPprzwWoy7p9cAXVE",
+        authDomain: "akiya-app-e7a9b.firebaseapp.com",
+        projectId: "akiya-app-e7a9b",
+        storageBucket: "akiya-app-e7a9b.firebasestorage.app",
+        messagingSenderId: "665091929996",
+        appId: "1:665091929996:web:720cedd79b1ba1e4c748a9",
+        measurementId: "G-JV28SYR2NL",
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const db = getFirestore(app);
+
+      const params = new URLSearchParams(window.location.search);
+      const houseId = params.get("houseId");
+
+      async function fetchHouseDetail() {
+        const contentEl = document.getElementById("content");
+
+        if (!houseId) {
+          contentEl.innerHTML = "<p>空き家が見つかりません。</p>";
+          return;
+        }
+
+        const houseRef = doc(db, "houses", houseId);
+        const houseSnap = await getDoc(houseRef);
+
+        if (!houseSnap.exists()) {
+          contentEl.innerHTML = "<p>この空き家は存在しません。</p>";
+          return;
+        }
+
+        const house = houseSnap.data();
+        const roomsSnap = await getDocs(
+          collection(db, "houses", houseId, "rooms")
+        );
+        const rooms = roomsSnap.docs.map((r) => ({ id: r.id, ...r.data() }));
+
+        const addrText = house.address
+          ? [house.address.prefecture, house.address.city, house.address.detail]
+              .filter(Boolean)
+              .join(" ")
+          : "不明";
+
+        contentEl.innerHTML = `
+        <p><a href="./houses.html">← 一覧に戻る</a></p>
+        <h1>${house.title || "名称未設定の空き家"}</h1>
+        <p><strong>住所:</strong> ${addrText}</p>
+
+        <h2>部屋一覧</h2>
+        <div class="slideshow">
+          ${rooms
+            .map(
+              (r) => `
+            <div class="slide">
+              <h3>${r.name || "部屋名なし"}</h3>
+              <p>${r.description || "説明なし"}</p>
+              <p>カテゴリ: ${r.category || "未設定"}</p>
+              ${r.imageUrl ? `<img src="${r.imageUrl}" alt="${r.name}">` : ""}
+              <a href="#" class="btn">申し込み</a>
+            </div>
+          `
+            )
+            .join("")}
+        </div>
+
+        <h2>アクセス</h2>
+        ${
+          house.mapUrl
+            ? `<iframe src="${house.mapUrl}" width="100%" height="300" style="border:0;" allowfullscreen></iframe>`
+            : ""
+        }
+        <p>${house.access || "交通情報未設定"}</p>
+      `;
+      }
+
+      window.addEventListener("DOMContentLoaded", fetchHouseDetail);
+    </script>
   </head>
   <body>
-    <h1>Available Houses</h1>
-
-    <!-- Filters -->
-    <section class="filters">
-      <input type="text" id="filterLocation" placeholder="City" />
-      <input type="number" id="filterPrice" placeholder="Max Price" />
-      <input type="number" id="filterSize" placeholder="Min Size (m²)" />
-      <button id="filterBtn">Apply Filters</button>
-    </section>
-
-    <!-- House List -->
-    <ul id="houseList"></ul>
-
-    <!-- Logout -->
-    <button id="logoutBtn">Logout</button>
-
-    <script type="module" src="js/houses.js"></script>
+    <div id="content">読み込み中...</div>
   </body>
 </html>

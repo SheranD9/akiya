@@ -1,13 +1,53 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
   <head>
     <meta charset="UTF-8" />
-    <title>Admin Reservations</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Reservation - Akiya App</title>
+    <link rel="stylesheet" href="./css/reservation.css" />
   </head>
   <body>
-    <h1>Reservations Dashboard</h1>
-    <ul id="reservationsList"></ul>
+    <div class="reservation-container">
+      <h1>予約/チケット購入</h1>
 
-    <script type="module" src="./js/reservation.js"></script>
+      <!-- House details (loaded dynamically) -->
+      <div id="houseDetails"></div>
+
+      <!-- Reservation form -->
+      <form id="reservationForm">
+        <input type="text" id="name" placeholder="名前" required />
+        <input type="email" id="email" placeholder="メールアドレス" required />
+        <input type="tel" id="contact" placeholder="電話番号" required />
+
+        <!-- Available dates -->
+        <label for="date">Select Visit Date</label>
+        <input type="date" id="date" name="date" required />
+
+        <!-- Payment Method -->
+        <label for="payment">お支払い方法:</label>
+        <select id="payment" required>
+          <option value="credit_card">Credit Card/クレジットカード</option>
+          <option value="paypal">PayPal/ペイパール</option>
+          <option value="paypay">PayPay/ペイペイ</option>
+          <option value="cash">Cash on Visit/来店時に現金支払い</option>
+        </select>
+
+        <!-- 備考欄 (Remarks) -->
+        <textarea
+          id="remarks"
+          placeholder="備考欄 (Remarks)"
+          rows="3"
+        ></textarea>
+
+        <button type="submit">Confirm Reservation</button>
+      </form>
+
+      <div id="ticketConfirmation"></div>
+      <div id="confirmationBox"></div>
+
+      <button id="logoutBtn">Logout</button>
+    </div>
+
+    <script type="module" src="js/reservation.js"></script>
   </body>
 </html>

@@ -23,53 +23,53 @@
     <header class="top__header header">
       <div class="header__inner">
         <div class="header__list">
-          <a href="#" class="header__item header__item-my">
-            <img src="./item/my_page.png" alt="マイページへ飛ぶ" />
+          <a href="./mypage.html" class="header__item header__item-my">
+            <img src="./image/item/my_page.png" alt="マイページへ飛ぶ" />
           </a>
           <a href="#" class="header__item header__item-chat">
-            <img src="./item/chat.png" alt="チャットへ飛ぶ" />
+            <img src="./image/item/chat.png" alt="チャットへ飛ぶ" />
           </a>
         </div>
       </div>
     </header>
     <main class="top__main main">
-
-
-      <section class="filters">
-        <div class="filters__inner">
-          <input type="text" id="filterLocation" placeholder="City" />
-          <input type="number" id="filterPrice" placeholder="Max Price" />
-          <input type="number" id="filterSize" placeholder="Min Size (m²)" />
-          <button id="filterBtn">Filter</button>
-        </div>
-      </section>
-
-
-
       <div class="top__pic">
         <div class="top__inner">
-          <img src="./item/top_container.png" alt="" />
+          <img src="./image/item/top_container.png" alt="" />
         </div>
       </div>
       <section class="main__conteiner container">
         <div class="container__inner">
           <article class="container__card container__card-museum">
-            <div class="container__pic">
-              <img src="./item/museum_btn.png" alt="" />
-            </div>
-            <div class="container__btn">
-              <p class="container__btn-text">博物館一覧</p>
-              <img src="./item/btn.png" alt="" class="container__btn-arrow" />
-            </div>
+            <a href="./museums.html">
+              <div class="container__pic">
+                <img src="./image/item/museum_btn.png" alt="" />
+              </div>
+              <div class="container__btn">
+                <p class="container__btn-text">博物館一覧</p>
+                <img
+                  src="./image/item/btn.png"
+                  alt=""
+                  class="container__btn-arrow"
+                />
+              </div>
+            </a>
           </article>
+
           <article class="container__card container__card-museum">
-            <div class="container__pic">
-              <img src="./item/house_btn.png" alt="" />
-            </div>
-            <div class="container__btn">
-              <p class="container__btn-text">空き家一覧</p>
-              <img src="./item/btn.png" alt="" class="container__btn-arrow" />
-            </div>
+            <a href="./houses.html">
+              <div class="container__pic">
+                <img src="./image/item/house_btn.png" alt="" />
+              </div>
+              <div class="container__btn">
+                <p class="container__btn-text">空き家一覧</p>
+                <img
+                  src="./image/item/btn.png"
+                  alt=""
+                  class="container__btn-arrow"
+                />
+              </div>
+            </a>
           </article>
         </div>
       </section>
@@ -100,5 +100,7 @@
         </div>
       </section>
     </main>
+    <script type="module" src="js/houses.js"></script>
+    <script type="module" src="js/index.js"></script>
   </body>
 </html>

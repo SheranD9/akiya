@@ -1,0 +1,169 @@
+/* Reset and basic styles */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f0f2f5;
+  color: #333;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+}
+
+/* Container styling */
+.reservation-container,
+.confirmation-container {
+  background: #fff;
+  padding: 25px 30px;
+  margin: 20px;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  max-width: 500px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Headings */
+h1 {
+  margin-bottom: 20px;
+  color: #222;
+  text-align: center;
+}
+
+/* House details and ticket sections */
+#houseDetails,
+#confirmationDetails,
+#ticketConfirmation {
+  margin-bottom: 20px;
+}
+
+/* Ticket card style */
+.ticket-card {
+  background: linear-gradient(145deg, #1e90ff, #28a745);
+  color: white;
+  padding: 20px;
+  border-radius: 12px;
+  position: relative;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  font-size: 14px;
+}
+
+.ticket-card::before,
+.ticket-card::after {
+  content: "";
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: #f0f2f5;
+  border-radius: 50%;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.ticket-card::before {
+  left: -10px;
+}
+
+.ticket-card::after {
+  right: -10px;
+}
+
+/* Form styling */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+input,
+select,
+textarea {
+  padding: 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Buttons */
+button {
+  padding: 12px;
+  border: none;
+  border-radius: 6px;
+  background-color: #1e90ff;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+button:hover {
+  background-color: #0f78d4;
+}
+
+/* Logout button */
+#logoutBtn {
+  margin-top: 15px;
+  background-color: #ff6347;
+}
+
+#logoutBtn:hover {
+  background-color: #e5533d;
+}
+
+/* Images */
+img {
+  max-width: 100%;
+  border-radius: 8px;
+  margin-top: 10px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .reservation-container,
+  .confirmation-container {
+    padding: 20px;
+    margin: 10px;
+  }
+
+  button {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  input,
+  select,
+  textarea {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  h1 {
+    font-size: 1.5rem;
+  }
+}
+
+.house-card {
+  background: #f9f9f9;
+  border: 1px solid #ddd;
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.house-img {
+  max-width: 100%;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.confirmation {
+  background: #e8f9e8;
+  padding: 20px;
+  border-radius: 10px;
+  border: 1px solid #c2e0c2;
+  text-align: center;
+}

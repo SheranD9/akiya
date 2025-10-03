@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>マイページ</title>
+    <link rel="stylesheet" href="./css/mypage.css" />
+    <style>
+      body {
+        font-family: sans-serif;
+        padding: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <p><a href="./index.html">＜</a></p>
+    <h1 class="title">マイページ</h1>
+
+    <div class="profile">
+      <img
+        id="user-icon"
+        src="./image/item/default-user.png"
+        alt="ユーザーアイコン"
+      />
+      <h2 id="user-name">ゲスト</h2>
+    </div>
+
+    <div class="menu">
+      <button onclick="location.href='settings.html'">設定</button>
+      <div class="menu-list">
+        <button class="menu-list__btn" onclick="location.href='tickets.html'">
+          チケット一覧
+        </button>
+        <button class="menu-list__btn" onclick="location.href='rentals.html'">
+          借りている物件一覧
+        </button>
+        <button class="menu-list__btn" onclick="location.href='history.html'">
+          閲覧履歴
+        </button>
+        <button class="menu-list__btn" onclick="location.href='likes.html'">
+          いいね一覧
+        </button>
+      </div>
+    </div>
+
+    <script type="module">
+      // Firebase CDN import
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+      import {
+        getAuth,
+        onAuthStateChanged,
+      } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyBCNbgsx6lXHgMT5jzQvohynAJfQ_q8GeM",
+        authDomain: "hanatare-1c228.firebaseapp.com",
+        projectId: "hanatare-1c228",
+      };
+
+      // 初期化
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+
+      // ユーザー情報を取得して表示
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          document.getElementById("user-name").textContent =
+            user.displayName || "名前未設定";
+          if (user.photoURL) {
+            document.getElementById("user-icon").src = user.photoURL;
+          }
+        } else {
+          document.getElementById("user-name").textContent =
+            "ログインしていません";
+        }
+      });
+    </script>
+  </body>
+</html>

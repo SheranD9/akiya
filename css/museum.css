@@ -1,0 +1,39 @@
+body {
+  font-family: sans-serif;
+  padding: 20px;
+}
+
+.slideshow {
+  display: flex;
+  margin-bottom: 14px;
+  overflow-x: auto;
+  gap: 10px;
+}
+
+.slide {
+  flex: 0 0 auto;
+  width: 300px;
+  border: 1px solid #ccc;
+  padding: 10px;
+  background: #fafafa;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 6px;
+}
+
+.btn {
+  display: inline-block;
+  padding: 10px 20px;
+  background: #007bff;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 5px;
+}
+
+.btn:hover {
+  background: #0056b3;
+}
+/*# sourceMappingURL=museum.css.map */

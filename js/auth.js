@@ -80,7 +80,7 @@ if (loginForm) {
     e.preventDefault();
 
     const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
+    const password = document.getElementById("login__password").value;
 
     try {
       await signInWithEmailAndPassword(auth, email, password);
